@@ -14,18 +14,21 @@ public class Provider {
     private long id;
 
     @NotBlank(message = "Name is mandatory")
-    @Column(name = "name")
+    @Column(name = "name", nullable=false)
+   // @Column(name = "name")
     private String name;
     
     @NotBlank(message = "Address is mandatory")
-    @Column(name = "address")
+    @Column(name = "address", nullable=false)
     private String address;
     
     @NotBlank(message = "Email is mandatory")
     @Column(name = "email")
     private String email;
 
-    public Provider() {}
+    public Provider() {
+    	System.out.println("Hello From constructeur");	
+    }
 
     public Provider(String name, String address, String email) {
         this.name = name;
@@ -45,7 +48,17 @@ public class Provider {
     public long getId() {
         return id;
     }
-
+    // block d'initilisatiin d'instance
+    {
+    	System.out.println("Hello From Block d'instance");
+    }
+    
+    // block d'initilisatiin d'instance
+    static {
+    	System.out.println("Hello From Block de classe");
+    }
+    
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -65,5 +78,6 @@ public class Provider {
     public String getAddress() {
         return address;
     }
+    
 }
 
