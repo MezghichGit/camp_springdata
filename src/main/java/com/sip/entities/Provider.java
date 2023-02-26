@@ -1,11 +1,8 @@
 package com.sip.entities;
 
-import javax.persistence.Column; 
-import javax.persistence.Entity; 
-import javax.persistence.GeneratedValue; 
-import javax.persistence.GenerationType; 
-import javax.persistence.Id; 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 public class Provider {
@@ -78,6 +75,18 @@ public class Provider {
     public String getAddress() {
         return address;
     }
-    
+
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "provider")
+    private List<Article> articles;
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
+
+
 }
 

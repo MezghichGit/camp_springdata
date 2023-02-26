@@ -20,9 +20,19 @@ import com.sip.entities.Article;
 import com.sip.entities.Provider;
 import com.sip.repositories.ArticleRepository;
 import com.sip.repositories.ProviderRepository;
+import org.springframework.web.multipart.MultipartFile;
+
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Controller
 @RequestMapping("/article/")
 public class ArticleController {
+
+    public static String uploadDirectory = System.getProperty("user.dir")+"/src/main/resources/static/uploads";
 	static String trouve=null;
 	
 	private final ArticleRepository articleRepository;
@@ -54,13 +64,35 @@ public class ArticleController {
     
     @PostMapping("add")
     //@ResponseBody
-    public String addArticle(@Valid Article article, BindingResult result, @RequestParam(name = "providerId", required = true) Long p) {
+    public String addArticle(@Valid Article article, BindingResult result, @RequestParam(name = "providerId", required = true) Long p,
+                             @RequestParam("files") MultipartFile[] files
+    ) {
     	
     	Provider provider = providerRepository.findById(p)
                 .orElseThrow(()-> new IllegalArgumentException("Invalid provider Id:" + p));
     	article.setProvider(provider);
-    	
-    	 articleRepository.save(article);
+
+        /// part upload
+
+        // upload du ficher
+        MultipartFile file = files[0];
+        Path fileNameAndPath = Paths.get(uploadDirectory, file.getOriginalFilename());
+
+        try {
+            Files.write(fileNameAndPath, file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Stockage du name du ficher dans la base
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(file.getOriginalFilename());
+        article.setPicture(fileName.toString());
+
+        System.out.println(article);
+
+
+        articleRepository.save(article);
     	 return "redirect:list";
     	
     	//return article.getLabel() + " " +article.getPrice() + " " + p.toString();
@@ -123,5 +155,16 @@ public class ArticleController {
         articleRepository.save(article);
         return "redirect:list";
     }
+
+    @GetMapping("show/{id}")
+    public String showArticleDetails(@PathVariable("id") long id, Model model) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("Invalid provider Id:" + id));
+
+        model.addAttribute("article", article);
+
+        return "article/showArticle";
+    }
+
 
 }
