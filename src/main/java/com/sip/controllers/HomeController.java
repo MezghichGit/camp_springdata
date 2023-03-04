@@ -24,4 +24,10 @@ public class HomeController {
     public String forgotpassword() {
         return "";
     }
+
+
+   @RequestMapping("/contact")
+   public String contact() {
+        return "front/contact.html";
+    }
 }
