@@ -102,9 +102,6 @@ public class ArticleController {
     public String deleteProvider(@PathVariable("id") long id, Model model) {
         /*Article artice = articleRepository.findById(id)
             .orElseThrow(()-> new IllegalArgumentException("Invalid provider Id:" + id));*/
-    	
-    	
-    	
         Optional<Article>article = articleRepository.findById(id);
         
         if(article.isPresent())
