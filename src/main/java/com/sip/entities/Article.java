@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -74,8 +76,8 @@ public class Article {
     }
 
     /**** Many To One ****/
-	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "provider_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Provider provider;

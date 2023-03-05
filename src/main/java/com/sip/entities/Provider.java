@@ -1,5 +1,7 @@
 package com.sip.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -75,7 +77,6 @@ public class Provider {
     public String getAddress() {
         return address;
     }
-
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "provider")
     private List<Article> articles;
 
